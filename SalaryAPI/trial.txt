@@ -1,0 +1,177 @@
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasklists.db'
+db = SQLAlchemy(app)
+CORS(app)
+
+class Employee(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    department = db.Column(db.String(255), nullable=False)
+    designation = db.Column(db.String(255), nullable=False)
+    contact = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    joining = db.Column(db.String(255), nullable=False)
+    address = db.Column(db.String(500), nullable=False)
+
+    def __str__(self):
+        return "id " + str(self.id) + " name " + self.name + " department " + self.department
+
+with app.app_context():
+    db.create_all()
+
+
+@app.route('/salary', methods=['POST'])
+def create_employee():
+    data = request.get_json()
+    added_employees=[]
+
+    for employee_data in data:
+        new_employee = Employee(**employee_data)
+        db.session.add(new_employee)
+        added_employees.append(new_employee)
+    db.session.commit()  # Commit the employee addition
+
+    return jsonify({'message': f"{len(added_employees)} employees added successfully",
+                    'employees': [employee.id for employee in added_employees]}), 201
+ 
+ @app.route('/salary', methods=['GET'])
+def get_employee():
+    employee = Employee.query.filter_by().first()
+
+    if employee:
+        return jsonify({'employee': employee.name, 'department': employee.department, 'designation': employee.designation, 'contact': employee.contact, 'email': employee.email, 'joining': employee.joining, 'address': employee.address})
+    else:
+        return jsonify({'error': 'Employee does not exist'}), 404
+    
+@app.route('/salary', methods=['PUT'])
+def update_tasklist():
+    data = request.get_json()
+    updated_entry = Employee.query.filter_by().first()
+
+    if updated_entry:
+        updated_entry.id = data['id']
+        updated_entry.name = data['name']
+        updated_entry.department = data['department']
+        updated_entry.designation = data['designation']
+        updated_entry.contact = data['contact']
+        updated_entry.email = data['email']
+        updated_entry.joining = data['joining']
+        updated_entry.address= data['address']
+
+        db.session.commit()
+        return jsonify({'message': 'Employee details updated successfully'})
+    else:
+        return jsonify({'error': 'Employee details does not exist before'}), 404 
+    
+# Endpoint to delete a user's tasklist
+@app.route('/salary', methods=['DELETE'])
+def delete_tasklist():
+    delete_entry = Employee.query.filter_by().first()
+
+    if delete_entry:
+        db.session.delete(delete_entry)
+        db.session.commit()
+        return jsonify({'message': 'Employee details deleted successfully'})
+    else:
+        return jsonify({'error': 'Employee details does not exist'}), 404
+
+if __name__ == '__main__':
+    app.run(debug=True)
+    ------------------------------------------------------------------------------------------------------------
+    ------------------------------------------------------------------------------------------------------------
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasklists.db'
+db = SQLAlchemy(app)
+CORS(app)
+
+class Employee(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    department = db.Column(db.String(255), nullable=False)
+    designation = db.Column(db.String(255), nullable=False)
+    contact = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    joining = db.Column(db.String(255), nullable=False)
+    address = db.Column(db.String(500), nullable=False)
+
+    def __str__(self):
+        return f"id {self.id} name {self.name} department {self.department}"
+
+with app.app_context():
+    db.create_all()
+
+@app.route('/salary', methods=['POST'])
+def create_employees():
+    employees_data = request.get_json()
+
+    added_employees = []
+    for employee_data in employees_data:
+        new_employee = Employee(**employee_data)
+        db.session.add(new_employee)
+        added_employees.append(new_employee)
+
+    db.session.commit()
+
+    return jsonify({'message': f"{len(added_employees)} employees added successfully",
+                    'employees': [employee.id for employee in added_employees]}), 201
+
+@app.route('/salary', methods=['GET'])
+def get_employees():
+    employees = Employee.query.all()
+    if employees:
+        return jsonify({'employees': [{'id': employee.id, 'name': employee.name, 'department': employee.department,
+                                       'designation': employee.designation, 'contact': employee.contact,
+                                       'email': employee.email, 'joining': employee.joining,
+                                       'address': employee.address} for employee in employees]})
+    else:
+        return jsonify({'message': 'No employees found'}), 404
+
+@app.route('/salary', methods=['PUT'])
+def update_employees():
+    employees_data = request.get_json()
+
+    updated_employees = []
+    for employee_data in employees_data:
+        employee = Employee.query.get(employee_data['id'])
+        if employee:
+            employee.name = employee_data.get('name', employee.name)
+            employee.department = employee_data.get('department', employee.department)
+            employee.designation = employee_data.get('designation', employee.designation)
+            employee.contact = employee_data.get('contact', employee.contact)
+            employee.email = employee_data.get('email', employee.email)
+            employee.joining = employee_data.get('joining', employee.joining)
+            employee.address = employee_data.get('address', employee.address)
+            updated_employees.append(employee)
+
+    db.session.commit()
+
+    return jsonify({'message': f"{len(updated_employees)} employees updated successfully",
+                    'employees': [employee.id for employee in updated_employees]})
+
+@app.route('/salary', methods=['DELETE'])
+def delete_employees():
+    employees_data = request.get_json()
+
+    deleted_employees = []
+    for employee_data in employees_data:
+        employee = Employee.query.get(employee_data['id'])
+        if employee:
+            db.session.delete(employee)
+            deleted_employees.append(employee)
+
+    db.session.commit()
+
+    return jsonify({'message': f"{len(deleted_employees)} employees deleted successfully",
+                    'employees': [employee.id for employee in deleted_employees]}), 200
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
