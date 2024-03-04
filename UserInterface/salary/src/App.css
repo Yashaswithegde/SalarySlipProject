@@ -1,0 +1,101 @@
+/* th {
+  background-color: bisque;
+  border: '1px solid #dddddd';
+  padding: '100px';
+  text-align: center;
+  margin: 45;
+  border-style: solid;
+  border: 10;
+  border-width: 20;
+}
+td {
+  border: '1px solid #dddddd';
+  padding: '100px';
+  text-align: center;
+  margin: 50;
+} */
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.employee-table th {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #c70f0f;
+}
+.employee-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.employee-table th {
+  background-color: #7fb8f1;
+  font-weight: bold;
+}
+
+.employee-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.employee-table tbody tr:hover {
+  background-color: #e2e5e8;
+  transition: background-color 0.3s ease;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('C:\Users\Yashaswi\Desktop\SalarySlipProj\UserInterface\salary\src\emp.png');
+  background-size: cover;
+  background-position: center center center center;
+  font-family: Arial, sans-serif;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: rgba(241, 221, 128, 0.9);
+}
+.filter {
+  position: fixed; /* Fixed position to stay on the side */
+  top: 0;
+  left: 0;
+  height: 100%; /* Full height of the viewport */
+  width: 300px; /* Adjust width as needed */
+  background-color: rgba(108, 163, 239, 0.8);
+}
+.add {
+  background-color: #4aaae5;
+}
+/* .del {
+  background-color: #ff7b7b;
+  padding: 10px;
+  align-items: center;
+} */
+.del {
+  background-color: #ff7b7b;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
